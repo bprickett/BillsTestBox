@@ -8,7 +8,7 @@
  * @since Toolbox 1.0
  */
 ?>
-
+<h1>THIS IS A GALLERY</h1>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="entry-header">
 		<h1 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'toolbox' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h1>
@@ -36,9 +36,7 @@
 						$image_img_tag = wp_get_attachment_image( $image->ID, 'thumbnail' );
 				?>
 
-				<figure class="gallery-thumb">
-					<a href="<?php the_permalink(); ?>"><?php echo $image_img_tag; ?></a>
-				</figure><!-- .gallery-thumb -->
+				<?php echo do_shortcode("[gallery]"); ?>
 
 				<p><em><?php printf( _n( 'This gallery contains <a %1$s>%2$s photo</a>.', 'This gallery contains <a %1$s>%2$s photos</a>.', $total_images, 'toolbox' ),
 						'href="' . get_permalink() . '" title="' . sprintf( esc_attr__( 'Permalink to %s', 'toolbox' ), the_title_attribute( 'echo=0' ) ) . '" rel="bookmark"',
@@ -84,3 +82,17 @@
 		<?php edit_post_link( __( 'Edit', 'toolbox' ), '<span class="edit-link">', '</span>' ); ?>
 	</footer><!-- #entry-meta -->
 </article><!-- #post-<?php the_ID(); ?> -->
+
+<script type="text/javascript" charset="utf-8">
+	
+	Shadowbox.init({
+	    overlayColor:     "#fff",
+	    overlayOpacity:         1.0
+	});
+
+	
+	// jQuery('.gallery').cycle({
+	// 		fx: 'scrollHorz', // choose your transition type, ex: fade, scrollUp, shuffle, etc...
+	// 		delay:   -2000
+	// 	});
+</script>

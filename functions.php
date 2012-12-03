@@ -77,6 +77,30 @@ endif; // toolbox_setup
  */
 add_action( 'after_setup_theme', 'toolbox_setup' );
 
+
+
+//Enqueue scripts 
+// http://codex.wordpress.org/Function_Reference/wp_enqueue_script
+// http://codex.wordpress.org/Function_Reference/get_template_directory_uri
+function my_scripts_method() {
+	   
+//     wp_enqueue_script('jquery.cycle.all', 
+// 					   get_template_directory_uri() . '/jquery.cycle.all.js',
+// 					   array('jquery'), false, false);            
+// }    
+//  
+// add_action('wp_enqueue_scripts', 'my_scripts_method'); // For use on the Front end (ie. Theme)
+
+    wp_enqueue_script('shadowbox', 
+					   get_template_directory_uri() . '/js/shadowbox/shadowbox.js',
+					   array('jquery'), false, false);            
+}    
+ 
+add_action('wp_enqueue_scripts', 'my_scripts_method'); // For use on the Front end (ie. Theme)
+
+
+
+
 /**
  * Set a default theme color array for WP.com.
  */
@@ -308,6 +332,95 @@ add_filter( 'attachment_link', 'toolbox_enhanced_image_navigation' );
 /**
  * This theme was built with PHP, Semantic HTML, CSS, love, and a Toolbox.
  */
+
+//START GALLERY START GALLERY START GALLERY START GALLERY START GALLERY START GALLERY START GALLERY 
+// remove code stops the theme from using wp-includes/media.php
+remove_shortcode('gallery');
+add_shortcode('gallery', 'bill_gallery_shortcode');
+
+/**
+ * The Gallery shortcode.
+ *
+ * This implements the functionality of the Gallery Shortcode for displaying
+ * WordPress images on a post.
+ *
+ * @since 2.5.0
+ *
+ * @param array $attr Attributes of the shortcode.
+ * @return string HTML content to display gallery.
+ */
+function bill_gallery_shortcode($attr) {
+	global $post;
+
+	extract(shortcode_atts(array(
+		'order'      => 'ASC',
+		'orderby'    => 'menu_order ID',
+		'id'         => $post->ID,
+		'itemtag'    => 'dl',
+		'icontag'    => 'dt',
+		'captiontag' => 'dd',
+		'columns'    => 3,
+		'size'       => 'thumbnail',
+		'include'    => '',
+		'exclude'    => ''
+	), $attr));
+
+	$id = intval($id);
+	if ( 'RAND' == $order )
+		$orderby = 'none';
+
+	if ( !empty($include) ) {
+		$include = preg_replace( '/[^0-9,]+/', '', $include );
+		$_attachments = get_posts( array('include' => $include, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
+
+		$attachments = array();
+		foreach ( $_attachments as $key => $val ) {
+			$attachments[$val->ID] = $_attachments[$key];
+		}
+	} elseif ( !empty($exclude) ) {
+		$exclude = preg_replace( '/[^0-9,]+/', '', $exclude );
+		$attachments = get_children( array('post_parent' => $id, 'exclude' => $exclude, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
+	} else {
+		$attachments = get_children( array('post_parent' => $id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => $order, 'orderby' => $orderby) );
+	}
+
+	if ( empty($attachments) )
+		return '';
+
+	if ( is_feed() ) {
+		$output = "\n";
+		foreach ( $attachments as $att_id => $attachment )
+			$output .= wp_get_attachment_link($att_id, $size, true) . "\n";
+		return $output;
+	}
+
+
+
+	$selector = "gallery-{$instance}";
+
+	$gallery_div = "<div id='$selector' class='gallery'>";
+	$output = apply_filters( 'gallery_style', $gallery_style . "\n\t\t" . $gallery_div );
+
+	$i = 0;
+	foreach ( $attachments as $id => $attachment ) {
+		
+		$img_src = wp_get_attachment_image_src($id, $size);
+		$img_src_full = wp_get_attachment_image_src($id, "full");
+		
+		$output .= "<a href='" . $img_src_full[0] . "' rel='shadowbox'><img src='" . $img_src[0] . "' /></a>";
+		
+		// $output .= "<img src='" . $img_src[0] . "' />";
+		
+	}
+
+	$output .= "
+			<br style='clear: both;' />
+		</div>\n";
+
+	return $output;
+}
+
+
 
 	// START BILLs custom PHOTOSET post type code
 

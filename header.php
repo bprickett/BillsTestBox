@@ -52,6 +52,14 @@
 <script src="<?php echo get_template_directory_uri(); ?>/js/html5.js" type="text/javascript"></script>
 <![endif]-->
 
+<link rel="stylesheet" type="text/css" href="<?php echo get_stylesheet_directory_uri(); ?>/js/shadowbox/shadowbox.css">
+
+<script type="text/javascript">
+Shadowbox.init();
+</script>
+
+
+
 <?php wp_head(); ?>
 </head>
 
