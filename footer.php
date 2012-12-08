@@ -23,5 +23,9 @@
 
 <?php wp_footer(); ?>
 
+<script type="text/javascript" charset="utf-8">
+	Shadowbox.init();
+</script>
+
 </body>
 </html>
