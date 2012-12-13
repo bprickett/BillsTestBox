@@ -77,6 +77,28 @@ endif; // toolbox_setup
  */
 add_action( 'after_setup_theme', 'toolbox_setup' );
 
+$args = array(
+	'flex-height'            => true,
+	'height'                 => 200,
+	'flex-width'             => true,
+	'width'                  => 950,
+	'default-image'          => get_template_directory_uri() . '/images/headers/header-default.jpg',
+	'random-default'         => false,
+	'default-text-color'     => '',
+	'header-text'            => true,
+	'uploads'                => true,
+	'wp-head-callback'       => '',
+	'admin-head-callback'    => '',
+	'admin-preview-callback' => '',
+);
+add_theme_support( 'custom-header', $args );
+
+$args = array(
+	'default-color' => '000000',
+	'default-image' => get_template_directory_uri() . '/images/background.jpg',
+);
+add_theme_support( 'custom-background', $args );
+
 
 
 //Enqueue scripts 
